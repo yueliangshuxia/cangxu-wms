@@ -15,6 +15,8 @@ This is a graduation project: **《基于 Spring Boot 与 Vue 的智能仓储管
 
 The static demo and the Vue app share the same design tokens. `assets/css/app.css` is the source; `frontend/src/styles/app.css` is a copy used by Vite. If you change design tokens or shared component styles, update both, otherwise the reference demo and the app drift apart.
 
+The static demo is published to GitHub Pages at <https://yueliangshuxia.github.io/cangxu-wms/> from the orphan `gh-pages` branch (only root `*.html` + `assets/`), while `master` holds the full source. Static login validates a small hard-coded demo account list in `assets/js/app.js` and stores the session in `localStorage` under `wms_demo_user`; it is a client-side demo gate, not real authentication.
+
 ## Commands
 
 ### Backend
