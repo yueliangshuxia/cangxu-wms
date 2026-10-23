@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E8EAE3">
+  <title>操作日志 · 仓序 WMS</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="audit">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<div class="app">
+  <aside class="rail" id="rail" aria-label="主导航"></aside>
+  <div class="shell">
+    <header class="topbar" id="topbar"></header>
+
+    <main class="main" id="main">
+      <div class="page-head">
+        <div>
+          <div class="page-kicker"><span class="dot"></span>系统 · 审计</div>
+          <h1>操作日志</h1>
+          <p class="sub">关键操作、权限变更与登录安全。日志保留 180 天，敏感操作需双人复核。</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn" type="button" data-toast="日志保留策略：180 天（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-sliders-horizontal"></use></svg>清理策略
+          </button>
+          <button class="btn btn-primary" type="button" data-toast="操作日志已导出（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>导出日志
+          </button>
+        </div>
+      </div>
+
+      <section class="kpi-grid four" aria-label="审计概览">
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-file-text"></use></svg>今日操作</div>
+          <div class="kpi-value"><strong data-count="1284">1,284</strong><span class="unit">条</span></div>
+          <div class="kpi-foot"><span class="delta up">+8.2%</span><span class="muted" style="font-size:9.5px">较昨日</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-log-out"></use></svg>登录次数</div>
+          <div class="kpi-value"><strong data-count="186">186</strong><span class="unit">次</span></div>
+          <div class="kpi-foot"><span class="delta">成功 183 · 失败 3</span><span class="muted" style="font-size:9.5px">4 个账号</span></div>
+        </div>
+        <div class="kpi hot">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>敏感操作</div>
+          <div class="kpi-value"><strong data-count="24">24</strong><span class="unit">条</span></div>
+          <div class="kpi-foot"><span class="delta">权限 6 · 导出 12</span><span class="muted" style="font-size:9.5px">已复核 22</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-triangle-alert"></use></svg>异常尝试</div>
+          <div class="kpi-value"><strong data-count="3">3</strong><span class="unit">次</span></div>
+          <div class="kpi-foot"><span class="delta down">连续失败 3 次已锁定</span><span class="muted" style="font-size:9.5px">IP 10.12.9.88</span></div>
+        </div>
+      </section>
+
+      <div class="grid grid-12">
+        <section class="card col-8">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">审计日志</h2>
+              <span class="card-sub">共 <strong id="js-audit-count">12</strong> 条记录</span>
+            </div>
+            <span class="tag tag-live tag-success"><span class="dot"></span>实时写入</span>
+          </div>
+          <div class="card-body" style="padding-top:12px">
+            <div class="filter-bar">
+              <div class="search-box">
+                <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+                <input class="input" id="js-audit-search" type="search" placeholder="搜索操作人、对象或 IP" aria-label="搜索日志">
+              </div>
+              <select class="select" id="js-audit-module" aria-label="模块筛选">
+                <option value="">全部模块</option>
+                <option>入库</option>
+                <option>出库</option>
+                <option>库存</option>
+                <option>库位</option>
+                <option>设备</option>
+                <option>系统</option>
+                <option>登录</option>
+              </select>
+              <select class="select" id="js-audit-result" aria-label="结果筛选">
+                <option value="">全部结果</option>
+                <option>成功</option>
+                <option>警告</option>
+                <option>失败</option>
+              </select>
+              <span class="spacer"></span>
+              <span class="filter-count">显示 <strong id="js-audit-count-2">12</strong> 条</span>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>时间</th><th>操作人 / 角色</th><th>模块</th><th>操作</th><th>对象</th><th>IP</th><th>结果</th><th></th></tr></thead>
+                <tbody id="js-audit-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-foot">
+            <span>日志为只读，任何删除都会记录二次审计</span>
+            <button class="card-link" type="button" data-toast="已刷新审计日志">
+              <svg class="icon" aria-hidden="true"><use href="#i-refresh-cw"></use></svg>刷新
+            </button>
+          </div>
+        </section>
+
+        <div class="col-4 stack">
+          <section class="card">
+            <div class="card-head">
+              <div class="t"><h2 class="card-title">敏感操作</h2><span class="card-sub">今日需关注</span></div>
+              <span class="tag tag-danger"><span class="dot"></span>4 条</span>
+            </div>
+            <div class="card-body" style="padding-top:10px">
+              <div class="list" id="js-sensitive-list"></div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div class="t"><h2 class="card-title">登录安全</h2><span class="card-sub">最近 24 小时</span></div>
+              <span class="tag tag-success"><span class="dot"></span>防护中</span>
+            </div>
+            <div class="card-body">
+              <div class="stat-line"><span class="sl">成功登录</span><span class="sv">183 次</span></div>
+              <div class="stat-line"><span class="sl">失败尝试</span><span class="sv">3 次</span></div>
+              <div class="stat-line"><span class="sl">锁定账号</span><span class="sv">1 个 · admin</span></div>
+              <div class="stat-line"><span class="sl">异地登录</span><span class="sv">0 次</span></div>
+              <div class="illus-panel mt16">
+                <img class="illus" src="assets/img/undraw/security.svg" alt="登录安全插画" loading="lazy">
+              </div>
+              <button class="btn mt12" type="button" style="width:100%" data-toast="已打开发登录策略">
+                <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>查看登录策略
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <p class="chart-note" style="margin-top:18px">日志包含操作人、角色、对象、IP 与结果；点击“详情”查看请求级信息。</p>
+    </main>
+  </div>
+</div>
+
+<!-- 日志详情抽屉 -->
+<div class="drawer" id="drawer-audit" role="dialog" aria-modal="true" aria-labelledby="audit-title" hidden>
+  <div class="drawer-head">
+    <div>
+      <h2 id="audit-title">日志详情</h2>
+      <p id="audit-sub">AUD-20261020-104218</p>
+    </div>
+    <button class="icon-btn" type="button" data-close-layer aria-label="关闭">
+      <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div id="audit-detail"></div>
+    <h3 class="section-title mt20">请求信息</h3>
+    <div class="hint-box" style="font-family:var(--font-mono);font-size:10.5px;line-height:1.7">
+      <span>request_id: 4f8c2a1e-9b3d-4a7c<br>user_agent: Chrome 130 / Windows 11<br>trace: wms-api → audit-service</span>
+    </div>
+    <h3 class="section-title mt20">变更摘要</h3>
+    <div class="stat-line"><span class="sl">变更前</span><span class="sv" id="audit-before">—</span></div>
+    <div class="stat-line"><span class="sl">变更后</span><span class="sv" id="audit-after">—</span></div>
+    <div class="hint-box mt12">
+      <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+      <span>演示数据。真实系统会把请求体、响应码与操作前后快照写入审计表。</span>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <span class="hint">只读记录</span>
+    <div class="flex">
+      <button class="btn" type="button" data-close-layer>关闭</button>
+      <button class="btn btn-primary" type="button" data-toast="已标记为已复核">标记已复核</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/vendor/echarts.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/pages.js"></script>
+<script src="assets/js/charts.js"></script>
+</body>
+</html>

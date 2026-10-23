@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E8EAE3">
+  <title>库位管理 · 仓序 WMS</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="locations">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<div class="app">
+  <aside class="rail" id="rail" aria-label="主导航"></aside>
+  <div class="shell">
+    <header class="topbar" id="topbar"></header>
+
+    <main class="main" id="main">
+      <div class="page-head">
+        <div>
+          <div class="page-kicker"><span class="dot"></span>库存 · 库位</div>
+          <h1>库位管理</h1>
+          <p class="sub">库区平面图、占用状态与温区属性。点击库位查看详情，锁定或释放库位。</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn" type="button" data-toast="库位图已导出为 PDF（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-printer"></use></svg>导出库位图
+          </button>
+          <button class="btn btn-primary" type="button" data-toast="已创建全仓盘点任务">
+            <svg class="icon" aria-hidden="true"><use href="#i-clipboard-check"></use></svg>库位盘点
+          </button>
+        </div>
+      </div>
+
+      <section class="kpi-grid four" aria-label="库位概览">
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-map"></use></svg>总库位</div>
+          <div class="kpi-value"><strong data-count="1280">1,280</strong><span class="unit">个</span></div>
+          <div class="kpi-foot"><span class="muted" style="font-size:9.5px">A–E 区 · 常温 / 恒温</span></div>
+        </div>
+        <div class="kpi hot">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-boxes"></use></svg>已占用</div>
+          <div class="kpi-value"><strong data-count="1046">1,046</strong><span class="unit">个</span></div>
+          <div class="kpi-foot"><span class="delta up">利用率 81.7%</span><span class="mini-bar"><i style="width:81.7%"></i></span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-circle-check"></use></svg>空闲</div>
+          <div class="kpi-value"><strong data-count="218">218</strong><span class="unit">个</span></div>
+          <div class="kpi-foot"><span class="muted" style="font-size:9.5px">A 区仅剩 32 个</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg>锁定 / 待盘点</div>
+          <div class="kpi-value"><strong data-count="16">16</strong><span class="unit">个</span></div>
+          <div class="kpi-foot"><span class="muted" style="font-size:9.5px">锁定 10 · 待盘点 6</span></div>
+        </div>
+      </section>
+
+      <div class="map-layout">
+        <section class="card">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">1F 库区平面图</h2>
+              <span class="card-sub">每个方块代表一个库位，悬停查看编码</span>
+            </div>
+            <div class="legend" aria-label="库位状态图例">
+              <span><i class="swatch occ"></i>已占用</span>
+              <span><i class="swatch free"></i>空闲</span>
+              <span><i class="swatch lock"></i>锁定</span>
+              <span><i class="swatch check"></i>待盘点</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="floor-map" id="js-floor-map" aria-label="仓库库位平面图"></div>
+            <div class="flex between mt12" style="flex-wrap:wrap;gap:8px">
+              <span class="chart-note">选中库位会以橙色描边高亮 · 主通道位于各巷道之间</span>
+              <span class="page-meta">数据更新：10-20 10:45</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="card loc-detail">
+          <div id="js-loc-detail"></div>
+        </aside>
+      </div>
+
+      <p class="chart-note" style="margin-top:18px">库位状态颜色同时使用填充纹理与图例文字，避免仅依赖颜色区分。</p>
+    </main>
+  </div>
+</div>
+
+<script src="assets/vendor/echarts.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/pages.js"></script>
+<script src="assets/js/charts.js"></script>
+</body>
+</html>

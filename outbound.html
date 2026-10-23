@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E8EAE3">
+  <title>出库作业 · 仓序 WMS</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="outbound">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<div class="app">
+  <aside class="rail" id="rail" aria-label="主导航"></aside>
+  <div class="shell">
+    <header class="topbar" id="topbar"></header>
+
+    <main class="main" id="main">
+      <div class="page-head">
+        <div>
+          <div class="page-kicker"><span class="dot"></span>作业 · 出库</div>
+          <h1>出库作业</h1>
+          <p class="sub">订单分配、波次拣货、复核与发运，按承诺时间倒排。</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn" type="button" data-toast="出库单草稿已创建（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-send"></use></svg>新建出库单
+          </button>
+          <button class="btn btn-primary" type="button" id="js-wave">
+            <svg class="icon" aria-hidden="true"><use href="#i-layers"></use></svg>生成波次
+          </button>
+        </div>
+      </div>
+
+      <section class="kpi-grid four" aria-label="出库概览">
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-inbox"></use></svg>待拣订单</div>
+          <div class="kpi-value"><strong data-count="36">36</strong><span class="unit">单</span></div>
+          <div class="kpi-foot"><span class="delta">共 1,284 件</span><span class="muted" style="font-size:9.5px">其中加急 8 单</span></div>
+        </div>
+        <div class="kpi hot">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-route"></use></svg>拣货中</div>
+          <div class="kpi-value"><strong data-count="8">8</strong><span class="unit">单</span></div>
+          <div class="kpi-foot"><span class="delta up">波次 W-07</span><span class="muted" style="font-size:9.5px">预计 11:20 完成</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-truck"></use></svg>今日已发</div>
+          <div class="kpi-value"><strong data-count="214">214</strong><span class="unit">单</span></div>
+          <div class="kpi-foot"><span class="delta up">+6.8%</span><span class="muted" style="font-size:9.5px">共 3,420 件</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>准时发运率</div>
+          <div class="kpi-value"><strong data-count="98.6" data-decimals="1">98.6</strong><span class="unit">%</span></div>
+          <div class="kpi-foot"><span class="delta up">+0.6%</span><span class="muted" style="font-size:9.5px">超时 3 单</span></div>
+        </div>
+      </section>
+
+      <div class="grid grid-12">
+        <section class="card col-8">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">出库订单</h2>
+              <span class="card-sub">今日共 <strong id="js-outbound-count">10</strong> 条记录</span>
+            </div>
+            <span class="tag tag-live tag-success"><span class="dot"></span>实时</span>
+          </div>
+          <div style="padding:12px 18px 0">
+            <div class="tabs" role="tablist" aria-label="出库状态筛选">
+              <button class="tab is-active" type="button" role="tab" data-outbound-tab="全部">全部 <span class="count">10</span></button>
+              <button class="tab" type="button" role="tab" data-outbound-tab="待分配">待分配 <span class="count">3</span></button>
+              <button class="tab" type="button" role="tab" data-outbound-tab="拣货中">拣货中 <span class="count">2</span></button>
+              <button class="tab" type="button" role="tab" data-outbound-tab="待复核">待复核 <span class="count">2</span></button>
+              <button class="tab" type="button" role="tab" data-outbound-tab="已发货">已发货 <span class="count">3</span></button>
+            </div>
+            <div class="filter-bar">
+              <div class="search-box">
+                <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+                <input class="input" id="js-outbound-search" type="search" placeholder="搜索订单号、客户或波次" aria-label="搜索出库订单">
+              </div>
+              <select class="select" aria-label="优先级筛选">
+                <option>全部优先级</option>
+                <option>加急</option>
+                <option>普通</option>
+              </select>
+              <span class="spacer"></span>
+              <span class="filter-count">显示 <strong id="js-outbound-count-2">10</strong> 条</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr><th>订单号</th><th>客户</th><th style="text-align:right">数量</th><th>优先级</th><th>波次</th><th>状态</th><th>预计发运</th><th></th></tr>
+              </thead>
+              <tbody id="js-outbound-body"></tbody>
+            </table>
+          </div>
+          <div class="card-foot">
+            <span>按承诺发运时间升序排列</span>
+            <button class="card-link" type="button" data-toast="已刷新出库订单">
+              <svg class="icon" aria-hidden="true"><use href="#i-refresh-cw"></use></svg>刷新
+            </button>
+          </div>
+        </section>
+
+        <div class="col-4 stack">
+          <section class="card">
+            <div class="card-head">
+              <div class="t">
+                <h2 class="card-title">波次 W-07 拣货路线</h2>
+                <span class="card-sub">5 个库位 · 110 件 · 预计 9 分钟</span>
+              </div>
+              <span class="tag tag-accent">进行中</span>
+            </div>
+            <div class="card-body">
+              <svg class="route-svg" viewBox="0 0 360 236" role="img" aria-label="波次拣货路线示意图">
+                <rect x="0" y="0" width="360" height="236" rx="8" fill="var(--surface-2)"/>
+                <rect class="rack" x="24" y="36" width="72" height="54" rx="3"/>
+                <rect class="rack" x="24" y="106" width="72" height="54" rx="3"/>
+                <rect class="rack" x="128" y="36" width="72" height="54" rx="3"/>
+                <rect class="rack" x="128" y="106" width="72" height="54" rx="3"/>
+                <rect class="rack" x="232" y="36" width="72" height="54" rx="3"/>
+                <rect class="rack" x="232" y="106" width="72" height="54" rx="3"/>
+                <text class="lbl" x="60" y="30" text-anchor="middle">A 区</text>
+                <text class="lbl" x="164" y="30" text-anchor="middle">B 区</text>
+                <text class="lbl" x="268" y="30" text-anchor="middle">C 区</text>
+                <text class="lbl" x="16" y="200">起点</text>
+                <text class="lbl" x="300" y="212">复核台</text>
+                <path class="path" d="M34 206 L34 176 L86 176 L86 96 L120 96 L120 176 L190 176 L190 96 L224 96 L224 176 L294 176 L294 206"/>
+                <circle class="stop" cx="86" cy="96" r="9"/><text class="stop-t" x="86" y="96">1</text>
+                <circle class="stop" cx="120" cy="96" r="9"/><text class="stop-t" x="120" y="96">2</text>
+                <circle class="stop" cx="190" cy="96" r="9"/><text class="stop-t" x="190" y="96">3</text>
+                <circle class="stop" cx="224" cy="96" r="9"/><text class="stop-t" x="224" y="96">4</text>
+                <circle class="stop" cx="294" cy="176" r="9"/><text class="stop-t" x="294" y="176">5</text>
+              </svg>
+              <div class="flex between mt12" style="font-size:10.5px;color:var(--ink-3)">
+                <span>拣货进度</span><span class="mono" id="js-pick-pct">0%</span>
+              </div>
+              <div class="mini-bar" style="max-width:none;margin-top:5px;height:5px"><i id="js-pick-bar" style="width:0%"></i></div>
+              <div class="stop-list mt12" id="js-route-stops"></div>
+              <button class="btn btn-primary mt12" type="button" id="js-pick" style="width:100%">
+                <svg class="icon" aria-hidden="true"><use href="#i-play"></use></svg>开始拣货
+              </button>
+              <div class="hint-box mt12">
+                <svg class="icon" aria-hidden="true"><use href="#i-route"></use></svg>
+                <span>路线按库位坐标生成，先 A 区后 B/C 区，减少回头路。</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-body">
+              <div class="side-note">
+                <img class="illus illus-sm" src="assets/img/undraw/deliveries.svg" alt="配送插画" loading="lazy">
+                <div class="txt">
+                  <strong>发运交接</strong>
+                  <p>今日已装车 12 车次，剩余 3 个波次待发运。</p>
+                  <button class="card-link mt8" type="button" data-toast="已打开发运交接单">查看交接单<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <p class="chart-note" style="margin-top:18px">波次与路线为静态演示；真实系统中由后端根据订单池、库位坐标与搬运设备状态生成。</p>
+    </main>
+  </div>
+</div>
+
+<script src="assets/vendor/echarts.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/pages.js"></script>
+<script src="assets/js/charts.js"></script>
+</body>
+</html>

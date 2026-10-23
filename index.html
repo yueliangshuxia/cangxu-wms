@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E8EAE3">
+  <title>工作台 · 仓序 WMS</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="dashboard">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<div class="app">
+  <aside class="rail" id="rail" aria-label="主导航"></aside>
+  <div class="shell">
+    <header class="topbar" id="topbar"></header>
+
+    <main class="main" id="main">
+      <div class="page-head">
+        <div>
+          <div class="page-kicker"><span class="dot"></span>华东一号仓 · 苏州</div>
+          <h1><span data-greeting>早上好</span>，陈屿</h1>
+          <p class="sub">今天仓库的月台、库存与设备都在这里。<span class="clock-note" data-clock>10月20日 周一 09:42</span></p>
+        </div>
+        <div class="page-actions">
+          <button class="btn" type="button" data-toast="日报已导出（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>导出日报
+          </button>
+          <a class="btn btn-primary" href="inbound.html#new">
+            <svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>新建入库单
+          </a>
+        </div>
+      </div>
+
+      <div class="dock-board" id="js-docks" aria-label="月台状态"></div>
+
+      <section class="kpi-grid" aria-label="核心指标">
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-boxes"></use></svg>在库 SKU</div>
+          <div class="kpi-value"><strong data-count="8426">8,426</strong><span class="unit">种</span></div>
+          <div class="kpi-foot">
+            <span class="delta up"><svg class="icon" aria-hidden="true"><use href="#i-trending-up"></use></svg>+2.4%</span>
+            <span class="mini-bar"><i style="width:86%"></i></span>
+          </div>
+        </div>
+        <div class="kpi hot">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-package-plus"></use></svg>今日入库</div>
+          <div class="kpi-value"><strong data-count="1286">1,286</strong><span class="unit">件</span></div>
+          <div class="kpi-foot">
+            <span class="delta up"><svg class="icon" aria-hidden="true"><use href="#i-trending-up"></use></svg>+12.6%</span>
+            <span class="muted mono" style="font-size:9.5px">目标 1,500</span>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-package-minus"></use></svg>今日出库</div>
+          <div class="kpi-value"><strong data-count="1742">1,742</strong><span class="unit">件</span></div>
+          <div class="kpi-foot">
+            <span class="delta up"><svg class="icon" aria-hidden="true"><use href="#i-trending-up"></use></svg>+8.1%</span>
+            <span class="muted mono" style="font-size:9.5px">已超目标</span>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-circle-check"></use></svg>库存准确率</div>
+          <div class="kpi-value"><strong data-count="99.2" data-decimals="1">99.2</strong><span class="unit">%</span></div>
+          <div class="kpi-foot">
+            <span class="delta down"><svg class="icon" aria-hidden="true"><use href="#i-trending-down"></use></svg>-0.3%</span>
+            <span class="muted" style="font-size:9.5px">差异 12 件</span>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-refresh-cw"></use></svg>平均周转</div>
+          <div class="kpi-value"><strong data-count="18.4" data-decimals="1">18.4</strong><span class="unit">天</span></div>
+          <div class="kpi-foot">
+            <span class="delta up"><svg class="icon" aria-hidden="true"><use href="#i-trending-down"></use></svg>-1.2 天</span>
+            <span class="muted" style="font-size:9.5px">目标 ≤ 20 天</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="grid grid-12">
+        <section class="card col-8">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">出入库趋势</h2>
+              <span class="card-sub">近 7 日 · 单位：件</span>
+            </div>
+            <a class="card-link" href="analytics.html">查看分析<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+          </div>
+          <div class="card-body">
+            <div class="chart" id="chart-trend" role="img" aria-label="近 7 日入库与出库趋势折线图"></div>
+            <details class="chart-data">
+              <summary>查看数据表</summary>
+              <table>
+                <thead><tr><th>日期</th><th>入库（件）</th><th>出库（件）</th></tr></thead>
+                <tbody>
+                  <tr><td>10/14</td><td class="num">980</td><td class="num">1,240</td></tr>
+                  <tr><td>10/15</td><td class="num">1,120</td><td class="num">1,380</td></tr>
+                  <tr><td>10/16</td><td class="num">1,040</td><td class="num">1,290</td></tr>
+                  <tr><td>10/17</td><td class="num">1,286</td><td class="num">1,510</td></tr>
+                  <tr><td>10/18</td><td class="num">1,190</td><td class="num">1,640</td></tr>
+                  <tr><td>10/19</td><td class="num">860</td><td class="num">980</td></tr>
+                  <tr><td>10/20</td><td class="num">1,286</td><td class="num">1,742</td></tr>
+                </tbody>
+              </table>
+            </details>
+          </div>
+        </section>
+
+        <section class="card col-4">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">库区占用率</h2>
+              <span class="card-sub">按已用库位 / 总库位计算</span>
+            </div>
+            <span class="tag tag-success"><span class="dot"></span>总体 81.7%</span>
+          </div>
+          <div class="card-body">
+            <div class="chart chart-sm" id="chart-zones" role="img" aria-label="各库区占用率横向条形图"></div>
+          </div>
+          <div class="card-foot">
+            <span>A 区接近饱和，建议将新品导入 B 区</span>
+            <a class="card-link" href="locations.html">库位图<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+          </div>
+        </section>
+
+        <section class="card col-7">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">今日作业流水</h2>
+              <span class="card-sub">来自 PDA 与 AGV 的实时回传</span>
+            </div>
+            <span class="tag tag-live tag-success"><span class="dot"></span>实时</span>
+          </div>
+          <div class="card-body" style="padding-top:8px">
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>时间</th><th>类型</th><th>单据</th><th>商品</th><th>操作员</th><th style="text-align:right">数量</th><th>状态</th></tr></thead>
+                <tbody id="js-activities"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-foot">
+            <span>最近更新：刚刚</span>
+            <a class="card-link" href="inbound.html">全部作业<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+          </div>
+        </section>
+
+        <section class="card col-5">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">异常待处理</h2>
+              <span class="card-sub">按影响程度排序</span>
+            </div>
+            <span class="tag tag-danger"><span class="dot"></span>4 条</span>
+          </div>
+          <div class="card-body" style="padding-top:10px">
+            <div class="list" id="js-alerts"></div>
+          </div>
+        </section>
+
+        <section class="card col-4 photo-card" style="min-height:230px">
+          <img src="assets/img/pexels/warehouse-aisle.jpg" alt="仓库 A 区通道两侧排列整齐的货架与料箱" loading="lazy">
+          <div class="photo-body">
+            <div class="ph-kicker"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-map-pin"></use></svg>库区实况 · A 区</div>
+            <strong>电子配件拣选区</strong>
+            <p>92% 库位占用 · 2 条主通道 · 常温</p>
+            <span class="tag"><span class="dot"></span>照片来自 Pexels</span>
+          </div>
+        </section>
+
+        <section class="card col-8">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">上架库位推荐</h2>
+              <span class="card-sub">AHP-TOPSIS 多指标评分 · 以 WH-1001 降噪蓝牙耳机为例</span>
+            </div>
+            <span class="algo-chip"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-sparkles"></use></svg>AHP-TOPSIS</span>
+          </div>
+          <div class="card-body">
+            <div class="grid" style="grid-template-columns:1fr 1.1fr;gap:18px">
+              <div>
+                <div class="weights">
+                  <div class="weight-row"><span class="wlabel">周转率</span><span class="weight-bar"><i style="width:100%"></i></span><span class="wval">0.34</span></div>
+                  <div class="weight-row"><span class="wlabel">订单相关性</span><span class="weight-bar"><i style="width:79%"></i></span><span class="wval">0.27</span></div>
+                  <div class="weight-row"><span class="wlabel">拣货距离</span><span class="weight-bar"><i style="width:65%"></i></span><span class="wval">0.22</span></div>
+                  <div class="weight-row"><span class="wlabel">体积适配</span><span class="weight-bar"><i style="width:50%"></i></span><span class="wval">0.17</span></div>
+                </div>
+                <div class="hint-box mt12">
+                  <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+                  <span>权重通过 AHP 一致性检验，CR = 0.042 &lt; 0.1。候选库位按 TOPSIS 贴近度降序排列。</span>
+                </div>
+              </div>
+              <div>
+                <div class="rank-list" id="js-algo-mini"></div>
+                <div class="flex between mt12">
+                  <span class="chart-note">Top 1 得分 0.892 · 预计拣货距离减少 18.5%</span>
+                  <a class="card-link" href="inbound.html">去上架<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <p class="chart-note" style="margin-top:18px">数据为演示环境模拟值 · 图表配色已通过色觉障碍可辨识度校验 · 图片来源：Pexels / unDraw / Picsum</p>
+    </main>
+  </div>
+</div>
+
+<script src="assets/vendor/echarts.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/pages.js"></script>
+<script src="assets/js/charts.js"></script>
+</body>
+</html>

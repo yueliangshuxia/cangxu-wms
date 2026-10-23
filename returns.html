@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E8EAE3">
+  <title>退货管理 · 仓序 WMS</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="returns">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<div class="app">
+  <aside class="rail" id="rail" aria-label="主导航"></aside>
+  <div class="shell">
+    <header class="topbar" id="topbar"></header>
+
+    <main class="main" id="main">
+      <div class="page-head">
+        <div>
+          <div class="page-kicker"><span class="dot"></span>作业 · 逆向物流</div>
+          <h1>退货管理</h1>
+          <p class="sub">退货登记、质检判定与处置：再上架、维修或报废，全程留痕。</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn" type="button" data-toast="退货单已导出（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>导出
+          </button>
+          <button class="btn btn-primary" type="button" data-toast="退货登记单已创建（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>新建退货单
+          </button>
+        </div>
+      </div>
+
+      <section class="kpi-grid four" aria-label="退货概览">
+        <div class="kpi hot">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-rotate-ccw"></use></svg>待处理退货</div>
+          <div class="kpi-value"><strong data-count="18">18</strong><span class="unit">单</span></div>
+          <div class="kpi-foot"><span class="delta">待质检 11 · 待上架 7</span><span class="muted" style="font-size:9.5px">最久等待 2 天</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-package"></use></svg>今日退货</div>
+          <div class="kpi-value"><strong data-count="26">26</strong><span class="unit">单</span></div>
+          <div class="kpi-foot"><span class="delta up">+4 单</span><span class="muted" style="font-size:9.5px">共 84 件</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-chart-line"></use></svg>退货率</div>
+          <div class="kpi-value"><strong data-count="1.8" data-decimals="1">1.8</strong><span class="unit">%</span></div>
+          <div class="kpi-foot"><span class="delta up">-0.2%</span><span class="muted" style="font-size:9.5px">行业均值 2.4%</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-circle-check"></use></svg>可再上架率</div>
+          <div class="kpi-value"><strong data-count="72">72</strong><span class="unit">%</span></div>
+          <div class="kpi-foot"><span class="delta">维修 18% · 报废 10%</span><span class="mini-bar"><i style="width:72%"></i></span></div>
+        </div>
+      </section>
+
+      <div class="grid grid-12">
+        <section class="card col-8">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">退货单</h2>
+              <span class="card-sub">今日共 <strong id="js-returns-count">8</strong> 条记录</span>
+            </div>
+            <span class="tag tag-live tag-warning"><span class="dot"></span>质检队列</span>
+          </div>
+          <div style="padding:12px 18px 0">
+            <div class="tabs" role="tablist" aria-label="退货状态筛选">
+              <button class="tab is-active" type="button" role="tab" data-return-tab="全部">全部 <span class="count">8</span></button>
+              <button class="tab" type="button" role="tab" data-return-tab="待质检">待质检 <span class="count">2</span></button>
+              <button class="tab" type="button" role="tab" data-return-tab="待上架">待上架 <span class="count">2</span></button>
+              <button class="tab" type="button" role="tab" data-return-tab="已入库">已入库 <span class="count">3</span></button>
+              <button class="tab" type="button" role="tab" data-return-tab="已报废">已报废 <span class="count">1</span></button>
+            </div>
+            <div class="filter-bar">
+              <div class="search-box">
+                <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+                <input class="input" id="js-returns-search" type="search" placeholder="搜索退货单、客户或商品" aria-label="搜索退货单">
+              </div>
+              <select class="select" aria-label="退货原因筛选">
+                <option>全部原因</option>
+                <option>七天无理由</option>
+                <option>质量问题</option>
+                <option>发错货</option>
+                <option>包装破损</option>
+              </select>
+              <span class="spacer"></span>
+              <span class="filter-count">显示 <strong id="js-returns-count-2">8</strong> 条</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>退货单</th><th>客户</th><th>商品</th><th style="text-align:right">数量</th><th>原因</th><th>状态</th><th>申请时间</th><th></th></tr></thead>
+              <tbody id="js-returns-body"></tbody>
+            </table>
+          </div>
+          <div class="card-foot">
+            <span>退货入库后默认进入 E 区退货暂存</span>
+            <button class="card-link" type="button" data-toast="已刷新退货单">
+              <svg class="icon" aria-hidden="true"><use href="#i-refresh-cw"></use></svg>刷新
+            </button>
+          </div>
+        </section>
+
+        <div class="col-4 stack">
+          <section class="card">
+            <div class="card-head">
+              <div class="t"><h2 class="card-title">退货原因</h2><span class="card-sub">近 30 天 · 按单量占比</span></div>
+              <span class="tag tag-neutral">124 单</span>
+            </div>
+            <div class="card-body">
+              <div class="weights">
+                <div class="weight-row"><span class="wlabel">七天无理由</span><span class="weight-bar"><i style="width:100%"></i></span><span class="wval">42%</span></div>
+                <div class="weight-row"><span class="wlabel">质量问题</span><span class="weight-bar"><i style="width:62%"></i></span><span class="wval">26%</span></div>
+                <div class="weight-row"><span class="wlabel">发错货</span><span class="weight-bar"><i style="width:33%"></i></span><span class="wval">14%</span></div>
+                <div class="weight-row"><span class="wlabel">包装破损</span><span class="weight-bar"><i style="width:26%"></i></span><span class="wval">11%</span></div>
+                <div class="weight-row"><span class="wlabel">其他</span><span class="weight-bar"><i style="width:17%"></i></span><span class="wval">7%</span></div>
+              </div>
+              <div class="hint-box mt12">
+                <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+                <span>“七天无理由”占比最高，建议把退货暂存区靠近质检台，减少二次搬运。</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div class="t"><h2 class="card-title">处置结构</h2><span class="card-sub">近 30 天质检结论</span></div>
+            </div>
+            <div class="card-body">
+              <div class="stat-line"><span class="sl">可再上架</span><span class="sv">72%</span></div>
+              <div class="mini-bar" style="max-width:none;height:4px;margin:2px 0 10px"><i style="width:72%"></i></div>
+              <div class="stat-line"><span class="sl">返修</span><span class="sv">18%</span></div>
+              <div class="mini-bar" style="max-width:none;height:4px;margin:2px 0 10px"><i style="width:18%;background:var(--blue)"></i></div>
+              <div class="stat-line"><span class="sl">报废</span><span class="sv">10%</span></div>
+              <div class="mini-bar" style="max-width:none;height:4px"><i style="width:10%;background:var(--danger)"></i></div>
+              <div class="illus-panel mt16">
+                <img class="illus" src="assets/img/undraw/heavy-box.svg" alt="退货包裹插画" loading="lazy">
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <p class="chart-note" style="margin-top:18px">点击“质检”打开处置抽屉；判定结果会回写退货单状态与库存。</p>
+    </main>
+  </div>
+</div>
+
+<!-- 退货质检抽屉 -->
+<div class="drawer" id="drawer-return" role="dialog" aria-modal="true" aria-labelledby="return-title" hidden>
+  <div class="drawer-head">
+    <div>
+      <h2 id="return-title">退货质检</h2>
+      <p id="return-sub">RT-20261020-006 · 天猫旗舰店</p>
+    </div>
+    <button class="icon-btn" type="button" data-close-layer aria-label="关闭">
+      <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="flex" style="align-items:flex-start;gap:12px">
+      <img id="return-img" src="assets/img/products/headphone.jpg" alt="" style="width:82px;height:82px;border-radius:7px;object-fit:cover;border:1px solid var(--line)">
+      <div class="grow">
+        <div class="cell-main" id="return-product">降噪蓝牙耳机</div>
+        <div class="cell-sub code" id="return-sku">WH-1001 · × 6</div>
+        <div class="mt8"><span class="tag tag-warning" id="return-reason"><span class="dot"></span>七天无理由</span></div>
+      </div>
+      <span class="tag tag-neutral" id="return-status">待质检</span>
+    </div>
+
+    <h3 class="section-title mt20">质检项</h3>
+    <div class="setting-row">
+      <div class="st"><strong>外观完好</strong><small>无明显划痕、磕碰、污渍</small></div>
+      <label class="switch"><input type="checkbox" checked data-label="外观完好"><span class="track"></span></label>
+    </div>
+    <div class="setting-row">
+      <div class="st"><strong>功能正常</strong><small>开机、连接、按键测试通过</small></div>
+      <label class="switch"><input type="checkbox" checked data-label="功能正常"><span class="track"></span></label>
+    </div>
+    <div class="setting-row">
+      <div class="st"><strong>配件齐全</strong><small>说明书、数据线、包装内衬</small></div>
+      <label class="switch"><input type="checkbox" data-label="配件齐全"><span class="track"></span></label>
+    </div>
+
+    <h3 class="section-title mt20">处置结论</h3>
+    <div class="stack">
+      <label class="flex" style="gap:8px;cursor:pointer;font-size:12px"><input type="radio" name="disposition" value="resell" checked style="accent-color:var(--accent)">可再上架 · 回到正常库存</label>
+      <label class="flex" style="gap:8px;cursor:pointer;font-size:12px"><input type="radio" name="disposition" value="repair" style="accent-color:var(--accent)">返修 · 转维修区</label>
+      <label class="flex" style="gap:8px;cursor:pointer;font-size:12px"><input type="radio" name="disposition" value="scrap" style="accent-color:var(--accent)">报废 · 计入损耗</label>
+    </div>
+
+    <div class="field mt16">
+      <label for="return-note">质检备注</label>
+      <textarea class="textarea" id="return-note" placeholder="记录外观、功能、配件情况"></textarea>
+    </div>
+
+    <div class="hint-box mt12">
+      <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+      <span>选择“可再上架”后，系统会生成上架推荐；选择“报废”需要主管复核。</span>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <span class="hint">质检结果会写入审计日志</span>
+    <div class="flex">
+      <button class="btn" type="button" data-close-layer>取消</button>
+      <button class="btn btn-primary" type="button" id="js-save-return">
+        <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>提交质检结果
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/vendor/echarts.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/pages.js"></script>
+<script src="assets/js/charts.js"></script>
+</body>
+</html>
