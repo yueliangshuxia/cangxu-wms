@@ -1,5 +1,9 @@
 # 仓序 WMS · 智能仓储管理系统
 
+> **在线演示（静态版）：** https://yueliangshuxia.github.io/cangxu-wms/  
+> **GitHub 仓库：** https://github.com/yueliangshuxia/cangxu-wms  
+> **演示账号：** `chenyu / wms2026`（主管）、`admin / admin123`（管理员）、`linzhou / wms2026`（收货员）、`zhouke / wms2026`（质检员）
+>
 > **最终选题：** 《基于 Spring Boot 与 Vue 的智能仓储管理系统设计与实现》
 >
 > 说明：工程型选题，AHP-TOPSIS 货位推荐作为系统核心模块；MQTT 设备接入作为“设备监控”模块实现，论文中写作“虚拟设备验证”，题目不承诺硬件。
