@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E8EAE3">
+  <title>设备监控 · 仓序 WMS</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="devices">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<div class="app">
+  <aside class="rail" id="rail" aria-label="主导航"></aside>
+  <div class="shell">
+    <header class="topbar" id="topbar"></header>
+
+    <main class="main" id="main">
+      <div class="page-head">
+        <div>
+          <div class="page-kicker"><span class="dot"></span>物联 · MQTT</div>
+          <h1>设备监控</h1>
+          <p class="sub">传感器、AGV 与 RFID 读写器通过 MQTT 接入，异常状态自动进入预警队列。</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn" type="button" id="js-refresh-devices">
+            <svg class="icon" aria-hidden="true"><use href="#i-refresh-cw"></use></svg>刷新
+          </button>
+          <button class="btn btn-primary" type="button" data-toast="设备配置面板已打开（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-sliders-horizontal"></use></svg>设备配置
+          </button>
+        </div>
+      </div>
+
+      <section class="device-grid" aria-label="实时环境">
+        <div class="device">
+          <div class="device-top">
+            <span class="device-name"><svg class="icon" aria-hidden="true"><use href="#i-thermometer"></use></svg>A 区温度</span>
+            <span class="tag tag-live tag-success"><span class="dot"></span>正常</span>
+          </div>
+          <div class="device-val"><strong id="js-temp-val">22.6</strong><span>°C</span></div>
+          <div class="device-foot"><span>阈值 26°C</span><span class="mono">TH-A01</span></div>
+          <div class="spark"><i style="width:76%;background:var(--c1)"></i></div>
+        </div>
+        <div class="device">
+          <div class="device-top">
+            <span class="device-name"><svg class="icon" aria-hidden="true"><use href="#i-droplets"></use></svg>A 区湿度</span>
+            <span class="tag tag-live tag-success"><span class="dot"></span>正常</span>
+          </div>
+          <div class="device-val"><strong id="js-hum-val">48</strong><span>%</span></div>
+          <div class="device-foot"><span>阈值 65%</span><span class="mono">TH-A01</span></div>
+          <div class="spark"><i style="width:48%;background:var(--c2)"></i></div>
+        </div>
+        <div class="device">
+          <div class="device-top">
+            <span class="device-name"><svg class="icon" aria-hidden="true"><use href="#i-wifi"></use></svg>在线设备</span>
+            <span class="tag tag-warning"><span class="dot"></span>2 台离线</span>
+          </div>
+          <div class="device-val"><strong>24</strong><span>/ 26 台</span></div>
+          <div class="device-foot"><span>网关 3/3 在线</span><span class="mono">MQTT</span></div>
+          <div class="spark"><i style="width:92%;background:var(--green)"></i></div>
+        </div>
+        <div class="device">
+          <div class="device-top">
+            <span class="device-name"><svg class="icon" aria-hidden="true"><use href="#i-activity"></use></svg>消息延迟</span>
+            <span class="tag tag-success"><span class="dot"></span>稳定</span>
+          </div>
+          <div class="device-val"><strong>38</strong><span>ms</span></div>
+          <div class="device-foot"><span>QoS 1 · 1,240 msg/min</span><span class="mono">EDGE-01</span></div>
+          <div class="spark"><i style="width:38%;background:var(--c3)"></i></div>
+        </div>
+      </section>
+
+      <div class="grid grid-12">
+        <section class="card col-6">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">温度趋势</h2>
+              <span class="card-sub">A 区 · 最近 24 小时 · 阈值 26°C</span>
+            </div>
+            <span class="tag tag-neutral">TH-A01</span>
+          </div>
+          <div class="card-body">
+            <div class="chart chart-sm" id="chart-temp" role="img" aria-label="A 区最近 24 小时温度折线图"></div>
+          </div>
+        </section>
+        <section class="card col-6">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">湿度趋势</h2>
+              <span class="card-sub">A 区 · 最近 24 小时 · 阈值 65%</span>
+            </div>
+            <span class="tag tag-neutral">TH-A01</span>
+          </div>
+          <div class="card-body">
+            <div class="chart chart-sm" id="chart-humidity" role="img" aria-label="A 区最近 24 小时湿度折线图"></div>
+          </div>
+        </section>
+
+        <section class="card col-8">
+          <div class="card-head">
+            <div class="t">
+              <h2 class="card-title">设备清单</h2>
+              <span class="card-sub">按最近心跳排序 · 24 台在线</span>
+            </div>
+            <span class="tag tag-live tag-success"><span class="dot"></span>实时</span>
+          </div>
+          <div class="card-body" style="padding-top:8px">
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>设备</th><th>位置</th><th>状态</th><th style="text-align:right">电量</th><th style="text-align:right">信号</th><th>最近心跳</th><th></th></tr></thead>
+                <tbody id="js-device-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-foot">
+            <span>离线设备：AGV-06 · 摄像头 CAM-02（维护中）</span>
+            <button class="card-link" type="button" data-toast="已打开设备日志">设备日志<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+          </div>
+        </section>
+
+        <div class="col-4 stack">
+          <section class="card">
+            <div class="card-head">
+              <div class="t">
+                <h2 class="card-title">AGV 车队</h2>
+                <span class="card-sub">8 台 · 3 台搬运中</span>
+              </div>
+              <span class="tag tag-accent">调度中</span>
+            </div>
+            <div class="card-body" style="padding-top:10px">
+              <div class="list" id="js-agv-list"></div>
+            </div>
+          </section>
+
+          <section class="card photo-card" style="min-height:200px">
+            <img src="assets/img/pexels/forklift.jpg" alt="仓库内作业中的叉车" loading="lazy">
+            <div class="photo-body">
+              <div class="ph-kicker"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-forklift"></use></svg>作业区 · A 区</div>
+              <strong>叉车作业中</strong>
+              <p>2 台叉车 · 平均搬运 12 分钟 / 单</p>
+              <span class="tag"><span class="dot"></span>照片来自 Pexels</span>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-body">
+              <div class="side-note">
+                <img class="illus illus-sm" src="assets/img/undraw/server-status.svg" alt="服务器状态插画" loading="lazy">
+                <div class="txt">
+                  <strong>数据链路</strong>
+                  <p>MQTT Broker 在线，3 个边缘网关正常转发。</p>
+                  <span class="tag tag-success mt8"><span class="dot"></span>链路正常</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <p class="chart-note" style="margin-top:18px">环境数据每 6 秒模拟刷新一次 · 真实系统通过 MQTT 主题 <span class="mono">warehouse/{zone}/sensor</span> 接入</p>
+    </main>
+  </div>
+</div>
+
+<script src="assets/vendor/echarts.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/pages.js"></script>
+<script src="assets/js/charts.js"></script>
+</body>
+</html>

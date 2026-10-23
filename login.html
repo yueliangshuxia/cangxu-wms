@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E8EAE3">
+  <title>登录 · 仓序 WMS</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="login">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#login-form">跳到登录表单</a>
+
+<div class="login-page">
+  <section class="login-visual" aria-label="产品介绍">
+    <img src="assets/img/pexels/warehouse-dark.jpg" alt="仓库通道两侧高耸的货架">
+    <div class="login-brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/><circle cx="18" cy="17" r="2" fill="currentColor" stroke="none"/></svg>
+      </span>
+      <span class="brand-text"><strong>仓序</strong><small>CANGXU WMS</small></span>
+    </div>
+
+    <div class="login-hero">
+      <div class="lh-kicker"><span class="dot"></span>华东一号仓 · 系统在线</div>
+      <h1>让每一次上架，<br>都有依据。</h1>
+      <p>把月台、库位、库存与设备放进同一张作业图。AHP-TOPSIS 货位推荐，让拣货少走回头路。</p>
+      <div class="login-stats">
+        <div><strong>8,426</strong><span>在库 SKU</span></div>
+        <div><strong>99.2%</strong><span>库存准确率</span></div>
+        <div><strong>24</strong><span>在线设备</span></div>
+      </div>
+    </div>
+
+    <span class="login-credit">PHOTO · PEXELS / OTHMANE ETTALBI</span>
+  </section>
+
+  <section class="login-side">
+    <div class="login-card">
+      <p class="eyebrow">WAREHOUSE MANAGEMENT SYSTEM</p>
+      <h2>登录仓序 WMS</h2>
+      <p class="lead">使用你的仓储账号进入工作台。</p>
+
+      <form class="login-form" id="login-form">
+        <div class="field">
+          <label for="login-user">账号</label>
+          <input class="input" id="login-user" name="user" autocomplete="username" placeholder="工号或邮箱" required>
+        </div>
+        <div class="field">
+          <label for="login-pass">密码</label>
+          <input class="input" id="login-pass" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" required>
+        </div>
+        <div class="login-row">
+          <label class="flex" style="gap:6px;cursor:pointer">
+            <input type="checkbox" checked style="accent-color:var(--accent)">记住这台设备
+          </label>
+          <button type="button" data-toast="请联系仓储主管重置密码（演示）" style="color:var(--accent);font-size:11.5px">忘记密码？</button>
+        </div>
+        <button class="btn btn-primary login-submit" type="submit">
+          <svg class="icon" aria-hidden="true"><use href="#i-log-out"></use></svg>进入工作台
+        </button>
+      </form>
+
+      <div class="login-hint">
+        演示账号：<code>chenyu</code> / <code>wms2026</code>（主管）
+        <button type="button" data-fill-demo style="color:var(--accent);font-weight:500;margin-left:4px">一键填入</button>
+        <br>其他账号：<code>admin</code> / <code>admin123</code> · <code>linzhou</code> / <code>wms2026</code> · <code>zhouke</code> / <code>wms2026</code>
+        <br>纯静态演示，账号密码仅用于前端校验，不会发送任何凭据。
+      </div>
+
+      <div class="login-foot">
+        <span>© 2026 仓序 WMS · 毕业设计演示</span>
+        <button class="theme-btn" type="button" data-theme-toggle></button>
+      </div>
+
+      <div class="login-illus">
+        <img src="assets/img/undraw/logistics.svg" alt="物流配送插画" loading="lazy">
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "strategies": [
+    {
+      "method": "随机上架",
+      "distance": 186.2,
+      "time": 3.8,
+      "utilization": 72.2
+    },
+    {
+      "method": "ABC 分类",
+      "distance": 162.5,
+      "time": 3.4,
+      "utilization": 72.1
+    },
+    {
+      "method": "AHP-TOPSIS",
+      "distance": 148.0,
+      "time": 3.2,
+      "utilization": 81.3
+    }
+  ],
+  "distanceImprovement": 20.5,
+  "timeImprovement": 14.1,
+  "utilizationImprovement": 9.1,
+  "consistencyRatio": 0.0,
+  "orders": 12480,
+  "skus": 200,
+  "generatedAt": "2026-10-22 00:20:11",
+  "source": "experiments/run_experiment.py",
+  "seed": 42,
+  "runs": 10,
+  "frequentPairs": 554,
+  "profile": {
+    "zones": 5,
+    "rows": 4,
+    "cols": 12,
+    "slots": 240,
+    "walkingSpeedMps": 1.2,
+    "pickMinutesPerLine": 0.45
+  }
+}

@@ -1,0 +1,30 @@
+warehouse: sz01
+
+sensors:
+  - code: TH-A01
+    location: A 区 03 巷道
+    base_temp: 22.6
+    base_humidity: 48
+  - code: TH-B01
+    location: B 区 01 巷道
+    base_temp: 22.4
+    base_humidity: 51
+  - code: TH-D01
+    location: D 区 02 巷道
+    base_temp: 21.8
+    base_humidity: 46
+
+agvs:
+  - code: AGV-01
+    battery: 72
+    state: WORKING
+  - code: AGV-04
+    battery: 64
+    state: WORKING
+  - code: AGV-07
+    battery: 18
+    state: CHARGING
+
+rfid:
+  - code: RFID-A01
+    location: A 区 收货口

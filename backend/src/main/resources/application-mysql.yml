@@ -1,0 +1,16 @@
+# MySQL profile.
+# Set DB_USERNAME / DB_PASSWORD in the environment before starting.
+# The schema and seed scripts are in src/main/resources; run them once manually
+# (or set spring.sql.init.mode=always for a fresh database).
+spring:
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:cangxu_wms}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${DB_USERNAME:wms}
+    password: ${DB_PASSWORD:wms2026}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: never
+
+mqtt:
+  enabled: ${MQTT_ENABLED:false}

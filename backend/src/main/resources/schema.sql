@@ -1,0 +1,209 @@
+CREATE TABLE IF NOT EXISTS sys_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(64) NOT NULL UNIQUE,
+    password_hash VARCHAR(100) NOT NULL,
+    real_name VARCHAR(64) NOT NULL,
+    role_code VARCHAR(32) NOT NULL,
+    status VARCHAR(16) NOT NULL DEFAULT 'ACTIVE',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS product (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    sku VARCHAR(64) NOT NULL UNIQUE,
+    name VARCHAR(128) NOT NULL,
+    category VARCHAR(64) NOT NULL,
+    spec VARCHAR(128),
+    unit VARCHAR(16) NOT NULL DEFAULT '件',
+    temp_type VARCHAR(16) NOT NULL DEFAULT 'NORMAL',
+    safety_stock INT NOT NULL DEFAULT 0,
+    status VARCHAR(16) NOT NULL DEFAULT 'ON_SALE',
+    image_url VARCHAR(255),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS supplier (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(32) NOT NULL UNIQUE,
+    name VARCHAR(128) NOT NULL,
+    contact VARCHAR(64),
+    phone VARCHAR(32),
+    category VARCHAR(64),
+    status VARCHAR(16) NOT NULL DEFAULT 'ACTIVE'
+);
+
+CREATE TABLE IF NOT EXISTS customer (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(32) NOT NULL UNIQUE,
+    name VARCHAR(128) NOT NULL,
+    channel VARCHAR(32),
+    contact VARCHAR(64),
+    phone VARCHAR(32),
+    status VARCHAR(16) NOT NULL DEFAULT 'ACTIVE'
+);
+
+CREATE TABLE IF NOT EXISTS warehouse (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(32) NOT NULL UNIQUE,
+    name VARCHAR(128) NOT NULL,
+    address VARCHAR(255),
+    timezone VARCHAR(64) DEFAULT 'Asia/Shanghai'
+);
+
+CREATE TABLE IF NOT EXISTS zone (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    warehouse_id BIGINT NOT NULL,
+    code VARCHAR(16) NOT NULL,
+    name VARCHAR(64) NOT NULL,
+    temp_type VARCHAR(16) NOT NULL DEFAULT 'NORMAL'
+);
+
+CREATE TABLE IF NOT EXISTS location (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    zone_id BIGINT NOT NULL,
+    code VARCHAR(32) NOT NULL UNIQUE,
+    row_no INT NOT NULL,
+    col_no INT NOT NULL,
+    capacity INT NOT NULL DEFAULT 120,
+    status VARCHAR(16) NOT NULL DEFAULT 'FREE',
+    current_sku VARCHAR(64)
+);
+
+CREATE TABLE IF NOT EXISTS inventory (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    product_id BIGINT NOT NULL,
+    location_id BIGINT,
+    qty INT NOT NULL DEFAULT 0,
+    locked_qty INT NOT NULL DEFAULT 0,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS audit_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(64),
+    role_code VARCHAR(32),
+    module VARCHAR(32) NOT NULL,
+    action VARCHAR(64) NOT NULL,
+    target VARCHAR(255),
+    ip VARCHAR(64),
+    result VARCHAR(16) NOT NULL DEFAULT 'SUCCESS',
+    detail VARCHAR(500),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS inbound_order (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    no VARCHAR(64) NOT NULL UNIQUE,
+    supplier_name VARCHAR(128),
+    dock VARCHAR(32),
+    eta DATETIME,
+    status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    operator VARCHAR(64),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS inbound_item (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT NOT NULL,
+    product_id BIGINT,
+    sku VARCHAR(64),
+    product_name VARCHAR(128),
+    qty INT NOT NULL,
+    location_id BIGINT,
+    location_code VARCHAR(32)
+);
+
+CREATE TABLE IF NOT EXISTS outbound_order (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    no VARCHAR(64) NOT NULL UNIQUE,
+    customer_name VARCHAR(128),
+    priority VARCHAR(16) DEFAULT 'NORMAL',
+    wave_no VARCHAR(32),
+    status VARCHAR(16) DEFAULT 'PENDING',
+    item_count INT DEFAULT 0,
+    total_qty INT DEFAULT 0,
+    promised_at VARCHAR(32),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS outbound_item (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT NOT NULL,
+    product_id BIGINT,
+    sku VARCHAR(64),
+    product_name VARCHAR(128),
+    qty INT NOT NULL,
+    location_id BIGINT,
+    location_code VARCHAR(32)
+);
+
+CREATE TABLE IF NOT EXISTS device (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(64) NOT NULL UNIQUE,
+    type VARCHAR(32),
+    location VARCHAR(128),
+    status VARCHAR(16) DEFAULT 'ONLINE',
+    battery INT,
+    signal_strength VARCHAR(32),
+    last_heartbeat DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS device_telemetry (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    device_code VARCHAR(64) NOT NULL,
+    metric VARCHAR(32) NOT NULL,
+    metric_value DECIMAL(10,2) NOT NULL,
+    unit VARCHAR(16),
+    collected_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS stocktake_task (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    no VARCHAR(64) NOT NULL UNIQUE,
+    scope VARCHAR(128),
+    type VARCHAR(32),
+    owner VARCHAR(64),
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    total INT NOT NULL DEFAULT 0,
+    counted INT NOT NULL DEFAULT 0,
+    diff_count INT NOT NULL DEFAULT 0,
+    started_at VARCHAR(32),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS stocktake_item (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    task_id BIGINT NOT NULL,
+    sku VARCHAR(64),
+    product_name VARCHAR(128),
+    location_code VARCHAR(32),
+    book_qty INT NOT NULL DEFAULT 0,
+    actual_qty INT NOT NULL DEFAULT 0,
+    diff_qty INT NOT NULL DEFAULT 0,
+    reason VARCHAR(128),
+    handle_action VARCHAR(32)
+);
+
+CREATE TABLE IF NOT EXISTS return_order (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    no VARCHAR(64) NOT NULL UNIQUE,
+    customer_name VARCHAR(128),
+    product_name VARCHAR(128),
+    sku VARCHAR(64),
+    qty INT NOT NULL DEFAULT 0,
+    reason VARCHAR(64),
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING_INSPECTION',
+    applied_at VARCHAR(32),
+    disposition VARCHAR(16),
+    note VARCHAR(255),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS system_setting (
+    setting_key VARCHAR(64) PRIMARY KEY,
+    setting_value VARCHAR(500),
+    group_name VARCHAR(32)
+);

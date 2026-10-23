@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E8EAE3">
+  <title>基础资料 · 仓序 WMS</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="masterdata">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<div class="app">
+  <aside class="rail" id="rail" aria-label="主导航"></aside>
+  <div class="shell">
+    <header class="topbar" id="topbar"></header>
+
+    <main class="main" id="main">
+      <div class="page-head">
+        <div>
+          <div class="page-kicker"><span class="dot"></span>资料 · 主数据</div>
+          <h1>基础资料</h1>
+          <p class="sub">商品、供应商与客户主数据。入库、出库和库存单据都引用这里的编码。</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn" type="button" data-toast="主数据已导出（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>导出资料
+          </button>
+          <button class="btn btn-primary" type="button" data-open-modal="#modal-product">
+            <svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>新增商品
+          </button>
+        </div>
+      </div>
+
+      <section class="kpi-grid four" aria-label="主数据概览">
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-boxes"></use></svg>商品 SKU</div>
+          <div class="kpi-value"><strong data-count="8426">8,426</strong><span class="unit">种</span></div>
+          <div class="kpi-foot"><span class="delta">在售 8,210</span><span class="muted" style="font-size:9.5px">停售 216</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-truck"></use></svg>供应商</div>
+          <div class="kpi-value"><strong data-count="32">32</strong><span class="unit">家</span></div>
+          <div class="kpi-foot"><span class="delta up">合作中 28</span><span class="muted" style="font-size:9.5px">评估中 3 · 暂停 1</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-users"></use></svg>客户</div>
+          <div class="kpi-value"><strong data-count="148">148</strong><span class="unit">个</span></div>
+          <div class="kpi-foot"><span class="delta">电商 96 · 线下 34</span><span class="muted" style="font-size:9.5px">B2B 18</span></div>
+        </div>
+        <div class="kpi hot">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>资料完整率</div>
+          <div class="kpi-value"><strong data-count="96.8" data-decimals="1">96.8</strong><span class="unit">%</span></div>
+          <div class="kpi-foot"><span class="delta down">27 条待补充</span><span class="mini-bar"><i style="width:96.8%"></i></span></div>
+        </div>
+      </section>
+
+      <div class="grid grid-12">
+        <section class="card col-8">
+          <div class="card-body" style="padding-top:6px">
+            <div class="tabs" data-tabs role="tablist" aria-label="主数据分类">
+              <button class="tab is-active" type="button" role="tab" data-tab="products" aria-selected="true">商品资料 <span class="count">12</span></button>
+              <button class="tab" type="button" role="tab" data-tab="suppliers" aria-selected="false">供应商 <span class="count">8</span></button>
+              <button class="tab" type="button" role="tab" data-tab="customers" aria-selected="false">客户 <span class="count">8</span></button>
+            </div>
+
+            <div class="filter-bar">
+              <div class="search-box">
+                <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+                <input class="input" id="js-master-search" type="search" placeholder="搜索编码、名称或联系人" aria-label="搜索主数据">
+              </div>
+              <select class="select" aria-label="状态筛选" id="js-master-status">
+                <option value="">全部状态</option>
+                <option>在售</option>
+                <option>合作中</option>
+                <option>暂停</option>
+                <option>评估中</option>
+              </select>
+              <span class="spacer"></span>
+              <span class="filter-count">显示 <strong id="js-master-count">12</strong> 条</span>
+            </div>
+
+            <div data-panel="products">
+              <div class="table-wrap">
+                <table class="table">
+                  <thead><tr><th>商品</th><th>分类</th><th>规格</th><th>单位</th><th>温区</th><th>状态</th><th>更新时间</th></tr></thead>
+                  <tbody id="js-products-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div data-panel="suppliers" hidden>
+              <div class="table-wrap">
+                <table class="table">
+                  <thead><tr><th>编码</th><th>供应商</th><th>联系人</th><th>电话</th><th>供货品类</th><th>状态</th><th></th></tr></thead>
+                  <tbody id="js-suppliers-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div data-panel="customers" hidden>
+              <div class="table-wrap">
+                <table class="table">
+                  <thead><tr><th>编码</th><th>客户</th><th>渠道</th><th>联系人</th><th>电话</th><th>状态</th><th></th></tr></thead>
+                  <tbody id="js-customers-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="flex between mt12" style="padding-bottom:4px">
+              <span class="chart-note">主数据变更会写入审计日志 · 删除前需检查未结单据</span>
+              <button class="card-link" type="button" data-toast="已打开字段配置">字段配置<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+            </div>
+          </div>
+        </section>
+
+        <div class="col-4 stack">
+          <section class="card">
+            <div class="card-head">
+              <div class="t"><h2 class="card-title">资料完整率</h2><span class="card-sub">按必填字段统计</span></div>
+              <span class="tag tag-warning">27 条待补充</span>
+            </div>
+            <div class="card-body">
+              <div class="stat-line"><span class="sl">商品图片</span><span class="sv">98.2%</span></div>
+              <div class="mini-bar" style="max-width:none;height:4px;margin:2px 0 10px"><i style="width:98.2%"></i></div>
+              <div class="stat-line"><span class="sl">供应商联系方式</span><span class="sv">100%</span></div>
+              <div class="mini-bar" style="max-width:none;height:4px;margin:2px 0 10px"><i style="width:100%"></i></div>
+              <div class="stat-line"><span class="sl">客户渠道归属</span><span class="sv">94.6%</span></div>
+              <div class="mini-bar" style="max-width:none;height:4px;margin:2px 0 10px"><i style="width:94.6%"></i></div>
+              <div class="stat-line"><span class="sl">商品温区</span><span class="sv">95.1%</span></div>
+              <div class="mini-bar" style="max-width:none;height:4px"><i style="width:95.1%"></i></div>
+              <div class="illus-panel mt16">
+                <img class="illus" src="assets/img/undraw/checking-boxes.svg" alt="核对资料插画" loading="lazy">
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div class="t"><h2 class="card-title">最近变更</h2><span class="card-sub">审计日志摘要</span></div>
+            </div>
+            <div class="card-body" style="padding-top:10px">
+              <div class="list">
+                <div class="list-item">
+                  <span class="li-icon info"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-pencil"></use></svg></span>
+                  <span class="li-body"><strong>WH-1007 规格更新</strong><small>1.5m / 100W · 操作员 陈屿</small></span>
+                  <span class="li-end">10:04</span>
+                </div>
+                <div class="list-item">
+                  <span class="li-icon ok"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-plus"></use></svg></span>
+                  <span class="li-body"><strong>新增客户 CUS-008</strong><small>企业采购 · 启明制造</small></span>
+                  <span class="li-end">昨天</span>
+                </div>
+                <div class="list-item">
+                  <span class="li-icon warn"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-triangle-alert"></use></svg></span>
+                  <span class="li-body"><strong>SUP-008 状态暂停</strong><small>南京云仓科技 · 待重新评估</small></span>
+                  <span class="li-end">10-18</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <p class="chart-note" style="margin-top:18px">主数据编码规则：商品 WH-####，供应商 SUP-###，客户 CUS-###。</p>
+    </main>
+  </div>
+</div>
+
+<!-- 新增商品 -->
+<div class="modal" id="modal-product" role="dialog" aria-modal="true" aria-labelledby="product-modal-title" hidden>
+  <div class="modal-head">
+    <div>
+      <h2 id="product-modal-title">新增商品</h2>
+      <p>创建后可在入库单和库存查询中引用。</p>
+    </div>
+    <button class="icon-btn" type="button" data-close-layer aria-label="关闭">
+      <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+    </button>
+  </div>
+  <form id="form-product">
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field">
+          <label for="p-name">商品名称</label>
+          <input class="input" id="p-name" name="name" placeholder="例如：桌面收纳盒" required>
+        </div>
+        <div class="field">
+          <label for="p-sku">SKU 编码</label>
+          <input class="input mono" id="p-sku" name="sku" placeholder="WH-3003" required>
+        </div>
+        <div class="field">
+          <label for="p-cat">分类</label>
+          <select class="select" id="p-cat" name="cat">
+            <option>电子配件</option>
+            <option>智能家居</option>
+            <option>户外装备</option>
+            <option>生活用品</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="p-spec">规格</label>
+          <input class="input" id="p-spec" name="spec" placeholder="例如：30 × 20 × 15 cm">
+        </div>
+        <div class="field">
+          <label for="p-unit">单位</label>
+          <select class="select" id="p-unit" name="unit">
+            <option>件</option>
+            <option>台</option>
+            <option>个</option>
+            <option>箱</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="p-temp">温区</label>
+          <select class="select" id="p-temp" name="temp">
+            <option>常温</option>
+            <option>恒温</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" type="button" data-close-layer>取消</button>
+      <button class="btn btn-primary" type="submit">
+        <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>创建商品
+      </button>
+    </div>
+  </form>
+</div>
+
+<script src="assets/vendor/echarts.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/pages.js"></script>
+<script src="assets/js/charts.js"></script>
+</body>
+</html>

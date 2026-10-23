@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#E8EAE3">
+  <title>库存查询 · 仓序 WMS</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-page="inventory">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<div class="app">
+  <aside class="rail" id="rail" aria-label="主导航"></aside>
+  <div class="shell">
+    <header class="topbar" id="topbar"></header>
+
+    <main class="main" id="main">
+      <div class="page-head">
+        <div>
+          <div class="page-kicker"><span class="dot"></span>库存 · 实时</div>
+          <h1>库存查询</h1>
+          <p class="sub">按商品、分类、库区与状态筛选，点击任意一行查看库存分布与流水。</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn" type="button" data-toast="盘点任务 CC-20261020-008 已创建">
+            <svg class="icon" aria-hidden="true"><use href="#i-clipboard-list"></use></svg>盘点任务
+          </button>
+          <button class="btn btn-primary" type="button" data-toast="库存明细已导出为 Excel（演示）">
+            <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>导出 Excel
+          </button>
+        </div>
+      </div>
+
+      <section class="kpi-grid four" aria-label="库存概览">
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-boxes"></use></svg>总库存</div>
+          <div class="kpi-value"><strong data-count="42680">42,680</strong><span class="unit">件</span></div>
+          <div class="kpi-foot"><span class="delta up">+2.1%</span><span class="muted" style="font-size:9.5px">8,426 个 SKU</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-circle-check"></use></svg>可用库存</div>
+          <div class="kpi-value"><strong data-count="39120">39,120</strong><span class="unit">件</span></div>
+          <div class="kpi-foot"><span class="muted" style="font-size:9.5px">占总库存 91.7%</span><span class="mini-bar"><i style="width:91.7%"></i></span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg>锁定库存</div>
+          <div class="kpi-value"><strong data-count="3560">3,560</strong><span class="unit">件</span></div>
+          <div class="kpi-foot"><span class="delta">拣货 / 复核占用</span><span class="muted" style="font-size:9.5px">128 个订单</span></div>
+        </div>
+        <div class="kpi hot">
+          <div class="kpi-label"><svg class="icon" aria-hidden="true"><use href="#i-triangle-alert"></use></svg>预警 SKU</div>
+          <div class="kpi-value"><strong data-count="2">2</strong><span class="unit">个</span></div>
+          <div class="kpi-foot"><span class="delta down">低于安全库存</span><span class="muted" style="font-size:9.5px">建议补货</span></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div class="t">
+            <h2 class="card-title">库存明细</h2>
+            <span class="card-sub">共 <strong id="js-inventory-count">12</strong> 条匹配记录</span>
+          </div>
+          <span class="tag tag-live tag-success"><span class="dot"></span>实时库存</span>
+        </div>
+        <div class="card-body" style="padding-top:12px">
+          <div class="filter-bar">
+            <div class="search-box">
+              <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+              <input class="input" id="js-inventory-search" type="search" placeholder="搜索 SKU、商品名或库位" aria-label="搜索库存">
+            </div>
+            <select class="select" id="js-inventory-cat" aria-label="分类筛选">
+              <option value="">全部分类</option>
+              <option>电子配件</option>
+              <option>智能家居</option>
+              <option>户外装备</option>
+              <option>生活用品</option>
+            </select>
+            <select class="select" id="js-inventory-status" aria-label="状态筛选">
+              <option value="">全部状态</option>
+              <option>正常</option>
+              <option>低库存</option>
+              <option>待检</option>
+            </select>
+            <button class="btn btn-sm" type="button" data-toast="高级筛选：库区、温区、批次（演示）">
+              <svg class="icon" aria-hidden="true"><use href="#i-filter"></use></svg>高级筛选
+            </button>
+            <span class="spacer"></span>
+            <span class="filter-count">显示 <strong id="js-inventory-count-2">12</strong> 条</span>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>商品</th><th>分类</th><th>主库位</th>
+                  <th style="text-align:right">在库</th><th style="text-align:right">可用</th><th style="text-align:right">锁定</th>
+                  <th style="text-align:right">安全库存</th><th>状态</th><th>更新时间</th>
+                </tr>
+              </thead>
+              <tbody id="js-inventory-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="pagination" id="js-pagination"></div>
+      </section>
+
+      <p class="chart-note" style="margin-top:18px">商品缩略图为 Picsum Photos 占位图 · 点击行查看库位分布与最近流水</p>
+    </main>
+  </div>
+</div>
+
+<!-- 库存详情抽屉 -->
+<div class="drawer" id="drawer-inventory" role="dialog" aria-modal="true" aria-labelledby="inv-name" hidden>
+  <div class="drawer-head">
+    <div>
+      <h2 id="inv-name">降噪蓝牙耳机</h2>
+      <p id="inv-sub">WH-1001 · 电子配件</p>
+    </div>
+    <button class="icon-btn" type="button" data-close-layer aria-label="关闭">
+      <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="flex" style="align-items:flex-start;gap:14px">
+      <img id="inv-img" src="assets/img/products/headphone.jpg" alt="" style="width:96px;height:96px;border-radius:8px;object-fit:cover;border:1px solid var(--line)">
+      <div class="grow">
+        <div id="inv-status"><span class="tag tag-success"><span class="dot"></span>正常</span></div>
+        <div class="detail-grid" style="grid-template-columns:1fr 1fr 1fr;margin-top:10px;border-top:0">
+          <div><dt>在库</dt><dd class="num" id="inv-stock">1,280</dd></div>
+          <div><dt>可用</dt><dd class="num" id="inv-avail">1,090</dd></div>
+          <div><dt>锁定</dt><dd class="num" id="inv-lock">190</dd></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt16" style="padding:10px 12px;border:1px dashed var(--line);border-radius:7px;background:var(--surface-2)">
+      <div class="mono" id="inv-barcode" aria-hidden="true" style="font-size:15px;letter-spacing:2px;color:var(--ink)">||| |||| || ||||| |||| |||</div>
+      <div class="code mt8" style="font-size:10px">WH-1001 · EAN-13 · 6901234567892</div>
+    </div>
+
+    <h3 class="section-title mt20">库位分布</h3>
+    <div id="inv-locs"></div>
+
+    <h3 class="section-title mt20">关键属性</h3>
+    <div class="stat-line"><span class="sl">主库位</span><span class="sv" id="inv-loc">A-01-03</span></div>
+    <div class="stat-line"><span class="sl">分类</span><span class="sv" id="inv-cat">电子配件</span></div>
+    <div class="stat-line"><span class="sl">安全库存</span><span class="sv" id="inv-safety">300 件</span></div>
+    <div class="stat-line"><span class="sl">最近更新</span><span class="sv" id="inv-updated">10-20 10:42</span></div>
+
+    <h3 class="section-title mt20">最近流水</h3>
+    <div class="list">
+      <div class="list-item">
+        <span class="li-icon ok"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-down"></use></svg></span>
+        <span class="li-body"><strong>入库 · ASN-20261020-004</strong><small>上架至 A-01-03 · 操作员 林舟</small></span>
+        <span class="li-end">10:42</span>
+      </div>
+      <div class="list-item">
+        <span class="li-icon info"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-up"></use></svg></span>
+        <span class="li-body"><strong>出库 · SO-20261020-011</strong><small>锁定 36 件 · 波次 W-06</small></span>
+        <span class="li-end">09:28</span>
+      </div>
+      <div class="list-item">
+        <span class="li-icon"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-refresh-cw"></use></svg></span>
+        <span class="li-body"><strong>盘点 · CC-20261019-A01</strong><small>账实一致 · 差异 0 件</small></span>
+        <span class="li-end">昨日</span>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <span class="hint">库存数据由 PDA 与 WMS 同步</span>
+    <div class="flex">
+      <button class="btn" type="button" data-toast="已生成补货建议">补货建议</button>
+      <button class="btn btn-primary" type="button" data-toast="已生成移库单">创建移库单</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/vendor/echarts.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/pages.js"></script>
+<script src="assets/js/charts.js"></script>
+</body>
+</html>
